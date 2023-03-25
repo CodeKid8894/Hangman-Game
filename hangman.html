@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+  </body>
+</html>
+<script type="text/javascript">
+  var pen = document.getElementById("canvas").getContext("2d");
+  pen.strokeStyle = "Black";
+  pen.moveTo(5, 5);
+  pen.lineTo(5, 395);
+  pen.stroke();
+  pen.strokeStyle = "Black";
+  pen.lineTo(395, 5);
+  pen.stroke();
+  pen.strokeStyle = "Black";
+  pen.lineTo(395, 15);
+  pen.stroke();
+  pen.strokeStyle = "Black";
+  pen.lineTo(395, 15);
+  pen.stroke();
+  pen.arc(95,50,40,0,2*Math.PI);
+  pen.stroke();
+  pen.moveTo(100, 85);
+  pen.lineTo(100, 250);
+  pen.stroke();
+  pen.moveTo(50, 145);
+  pen.lineTo(150, 145);
+  pen.stroke();
+  pen.moveTo(100, 250);
+  pen.lineTo(50, 300);
+  pen.stroke();
+</script>

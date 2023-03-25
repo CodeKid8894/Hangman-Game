@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Hangman game</title>
+  </head>
+  <body>
+    <h1 class="title">Hangman Game</h1>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <input type="text" id="guess">
+    <button onclick="isPartOf()">Enter</button>
+    <button onclick="hint()">Hint</button>
+    <div class="stats">
+
+
+    <h1 id="spaces"></h1>
+    <h1 id="lives">[]</h1>
+    <h1 id="lettersguessed">[]</h1>
+    <h1 id="letterswrong">[]</h1>
+    </div>
+    <h1>List of all the states</h1>
+    <p id="list"></p>
+  </body>
+</html>
+<script type="text/javascript">
+var states = ['Alabama','Alaska','American Samoa','Arizona',
+'Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia',
+ 'Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas',
+ 'Kentucky','Louisiana','Maine', 'Maryland','Massachusetts','Michigan','Minnesota',
+ 'Mississippi','Missouri','Montana','Nebraska','Nevada',
+ 'New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota', 
+ 'Ohio','Oklahoma','Oregon','Pennsylvania','Puerto Rico',
+ 'Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont', 
+ 'Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+
+
+  var word = states[Math.floor(Math.random() * states.length)];
+  var word2 = word.toLowerCase();
+  var array = [];
+  makeArray();
+  var lettersGuessed = "";
+  var lettersWrong = "";
+  var lives = 8;
+  var hangman = new Draw();
+  var draw = 0;
+  var pen = document.getElementById("canvas").getContext("2d");
+  function makeArray(){
+    for(var i = 0; i<word2.length; i++){
+      if(word2[i] == " "){
+        array[i] = "-"
+      } else {
+          array[i] = "_";
+      }
+    }
+    showStats();
+    document.getElementById("spaces").innerHTML = array;
+  }
+   function isPartOf(){
+     var letter = document.getElementById("guess").value;
+     var bool = false;
+     var bool1 = true;
+     for(var i = 0; i<lettersGuessed.length; i++){
+       if(lettersGuessed[i] == letter){
+         bool1 = false;
+       }
+     }
+     if(!(bool1)){
+       alert("you already guesed this. guess again");
+     }
+     if(bool1){
+
+     lettersGuessed += letter;
+     for(var i = 0; i<word2.length; i++){
+       if(word2[i] == letter){
+         array[i] = word2[i];
+         bool = true;
+       }
+     }
+
+      if(!(bool)){
+        lettersWrong += letter;
+        lives --;
+        draw ++;
+      }
+
+
+      showStats();
+      hangTheMan1234();
+      winLose();
+     document.getElementById("spaces").innerHTML = array;
+
+   }
+   }
+
+function showStats(){
+    document.getElementById("lives").innerHTML = "lives:  " + lives;
+    document.getElementById("lettersguessed").innerHTML = "letters guessed:  " + lettersGuessed;
+    document.getElementById("letterswrong").innerHTML = "letters wrong:  " + lettersWrong;
+}
+
+function winLose(){
+  var count = 0;
+  //if the player loses
+  if(lives == 0){
+    document.getElementById("lives").innerHTML = "0";
+    alert("you lose. refresh to play again");
+  }
+
+  for(var i = 0; i<array.length; i++){
+    if(!(array[i] == "_")){
+      count++;
+    }
+  }
+  if((count == array.length)&&(lives != 0)){
+    alert("congrats! you win! refresh to play again");
+  }
+}
+
+function hint(){
+  var a = word[0];
+  var b = word[word2.length - 1];
+  alert("This state name starts with a " + a + " and ends with a " + b);
+}
+
+function hangTheMan1234(){
+  if(lives == 7){
+    hangman.one();
+  }
+  else if(lives == 6){
+    hangman.two();
+  }
+  else if(lives == 5){
+    hangman.three();
+  }
+  else if(lives == 4){
+    hangman.four();
+  }
+  else if(lives == 3){
+    hangman.five();
+  }
+  else if(lives == 2){
+    hangman.six();
+  }
+  else if(lives == 1){
+    hangman.seven();
+  } else {
+    hangman.eight();
+  }
+
+}
+function Draw(){
+   //this.canvasWidth = canvas.width;
+   //this.canvasHeight = canvas.height;
+   this.times = 0;
+}
+
+Draw.prototype.one = function (){
+  //draw the vertical bar
+    pen.strokeStyle = "Black";
+    pen.moveTo(5, 5);
+    pen.lineTo(5, 395);
+    pen.stroke();
+};
+Draw.prototype.two = function (){
+  //draw the horizontal bar
+    pen.strokeStyle = "Black";
+    pen.lineTo(395, 5);
+    pen.stroke();
+};
+
+Draw.prototype.three = function (){
+  //draw the hoock
+    pen.strokeStyle = "Black";
+    pen.lineTo(395, 15);
+    pen.stroke();
+};
+Draw.prototype.four = function (){
+  //draw the diagonal bar
+    pen.strokeStyle = "Black";
+    pen.lineTo(395, 15);
+    pen.stroke();
+};
+
+Draw.prototype.five = function(){
+  //draw the head
+  pen.arc(95,50,40,0,2*Math.PI);
+  pen.stroke();
+};
+
+Draw.prototype.six = function(){
+  //draw the body
+ pen.moveTo(100, 85);
+ pen.lineTo(100, 250);
+ pen.stroke();
+};
+
+Draw.prototype.seven = function(){
+  //draw te hands
+    pen.moveTo(50, 145);
+    pen.lineTo(150, 145);
+    pen.stroke();
+};
+
+Draw.prototype.eight = function(){
+  //draw the legs
+  pen.moveTo(100, 250);
+  pen.lineTo(50, 300);
+  pen.stroke();
+  pen.moveTo(100, 250);
+  pen.lineTo(145, 300);
+  pen.stroke();
+
+};
+
+function showStates(){
+  var listApp = "";
+  for(i = 0; i < states.length; i++){
+    listApp += states[i];
+    listApp += "<br>";
+  }
+  document.getElementById("list").innerHTML = listApp;
+}
+
+showStates();
+
+</script>
+
+<style media="screen">
+h1{
+  font-family: "Lucida Console", "Courier New",  monospace;
+}
+
+body{
+  background-color: yellow;
+
+}
+
+.stats{
+  padding: 5px;
+  border-color: black;
+  border: 5px;
+}
+
+button{
+  padding: 20px;
+}
+
+input{
+  padding: 20px;
+}
+
+.title{
+   font-family: Helvetica, Arial, sans-serif;
+}
+
+canvas{
+  border-color: black;
+  border: 1px;
+}
+</style>
